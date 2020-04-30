@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnimalTable extends Migration
+class CreateReclamosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateAnimalTable extends Migration
      */
     public function up()
     {
-        Schema::create('animal', function (Blueprint $table) {
+        Schema::create('reclamos', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
+            $table->string('description');
+            $table->unsignedBigInteger('animal_id');
+            $table->string('url');
             $table->timestamps();
+
+            $table->foreign('animal_id')->references('id')->on('animals')->onDelete('cascade');
         });
     }
 
@@ -27,6 +32,6 @@ class CreateAnimalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('animal');
+        Schema::dropIfExists('reclamo');
     }
 }
