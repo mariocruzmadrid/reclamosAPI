@@ -40,11 +40,6 @@ class AuthController extends Controller
 
         return response(['user' => auth()->user(), 'accessToken' => $accessToken]);
     }
-
-    public function prueba()
-    {
-        return response(['message'=>'Hola']);
-    }
 }
 
 
