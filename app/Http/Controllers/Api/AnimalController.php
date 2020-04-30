@@ -30,9 +30,7 @@ class AnimalController extends Controller
            'name'=>'required'
         ]);
 
-        $animal = new Animal;
-        $animal->name = $validatedAnimal['name'];
-        $animal->save();
+        $animal = Animal::create($validatedAnimal);
 
         return response(['message'=>$animal]);
     }
@@ -64,8 +62,8 @@ class AnimalController extends Controller
         ]);
 
         $animal = Animal::find($id);
-        $animal->name =  $validatedAnimal['name'];
-        $animal->save();
+
+        $animal->update($validatedAnimal);
 
         return response(['message'=>$animal]);
     }
