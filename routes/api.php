@@ -23,4 +23,4 @@ Route::post('/login','Api\AuthController@login');
 Route::resource('/animals','Api\AnimalController')->middleware('auth:api');
 Route::resource('/reclamos','Api\ReclamoController')->middleware('auth:api');
 Route::resource('/registroAvistamientos','Api\RegistroAvistamientoController')->middleware('auth:api');
-Route::resource('/registroReclamos','Api\RegistroReclamosController')->middleware('auth:api');
+Route::resource('/registroReclamos','Api\RegistroReclamoController')->middleware('auth:api');

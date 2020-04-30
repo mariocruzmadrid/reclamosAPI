@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Animal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class AnimalController extends Controller
      */
     public function index()
     {
-        //
+        return Animal::all();
     }
 
     /**
@@ -25,7 +26,15 @@ class AnimalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedAnimal = $request->validate([
+           'name'=>'required'
+        ]);
+
+        $animal = new Animal;
+        $animal->name = $validatedAnimal['name'];
+        $animal->save();
+
+        return response(['message'=>$animal]);
     }
 
     /**
@@ -36,7 +45,9 @@ class AnimalController extends Controller
      */
     public function show($id)
     {
-        //
+        $animal = Animal::where('id','=',$id)->firstOrFail();
+
+        return response(['message'=>$animal]);
     }
 
     /**
@@ -48,7 +59,15 @@ class AnimalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedAnimal = $request->validate([
+            'name'=>'required'
+        ]);
+
+        $animal = Animal::find($id);
+        $animal->name =  $validatedAnimal['name'];
+        $animal->save();
+
+        return response(['message'=>$animal]);
     }
 
     /**
@@ -59,6 +78,9 @@ class AnimalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $animal = Animal::find($id);
+        $animal->delete();
+
+        return response(['message'=>$animal]);
     }
 }
