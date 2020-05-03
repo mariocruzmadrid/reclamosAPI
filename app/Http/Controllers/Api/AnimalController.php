@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Animal;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseController as BaseController;
 use Illuminate\Http\Request;
+use App\Http\Resources\Animal as AnimalResource;
+use Illuminate\Support\Facades\Validator;
 
-class AnimalController extends Controller
+class AnimalController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,9 @@ class AnimalController extends Controller
      */
     public function index()
     {
-        return Animal::all();
+        $animals = Animal::all();
+
+        return $this->sendResponse(AnimalResource::collection($animals),'Animals retrieved successfully');
     }
 
     /**
@@ -26,13 +30,19 @@ class AnimalController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedAnimal = $request->validate([
+        $dataInput = $request->all();
+
+        $validator = Validator::make($dataInput, [
            'name'=>'required'
         ]);
 
-        $animal = Animal::create($validatedAnimal);
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(),400);
+        }
 
-        return response(['message'=>$animal]);
+        $animal = Animal::create($dataInput);
+
+        return $this->sendResponse(new AnimalResource($animal), 'Animal created successfully');
     }
 
     /**
@@ -43,9 +53,13 @@ class AnimalController extends Controller
      */
     public function show($id)
     {
-        $animal = Animal::where('id','=',$id)->firstOrFail();
+        $animal = Animal::find($id);
 
-        return response(['message'=>$animal]);
+        if(is_null($animal)){
+            return $this->sendError('Animal not found');
+        }
+
+        return $this->sendResponse(new AnimalResource($animal), 'Animal retrieved successfully');
     }
 
     /**
@@ -55,17 +69,21 @@ class AnimalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Animal $animal)
     {
-        $validatedAnimal = $request->validate([
-            'name'=>'required'
+        $dataInput = $request->all();
+
+        $validator = Validator::make($dataInput, [
+           'name' => 'required'
         ]);
 
-        $animal = Animal::find($id);
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors());
+        }
 
-        $animal->update($validatedAnimal);
+        $animal->update($dataInput);
 
-        return response(['message'=>$animal]);
+        return $this->sendResponse(new AnimalResource($animal), 'Animal updated successfully');
     }
 
     /**
@@ -74,11 +92,10 @@ class AnimalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Animal $animal)
     {
-        $animal = Animal::find($id);
         $animal->delete();
 
-        return response(['message'=>$animal]);
+        return $this->sendResponse([], 'Animal deleted successfully');
     }
 }
