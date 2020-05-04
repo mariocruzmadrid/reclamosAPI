@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseController as BaseController;
+use App\Reclamo;
 use Illuminate\Http\Request;
+use App\Http\Resources\Reclamo as ReclamoResource;
+use Illuminate\Support\Facades\Validator;
 
-class ReclamoController extends Controller
+class ReclamoController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +17,9 @@ class ReclamoController extends Controller
      */
     public function index()
     {
-        //
+        $reclamos = Reclamo::all();
+
+        return $this->sendResponse(ReclamoResource::collection($reclamos),'Reclamos mostrados con éxito');
     }
 
     /**
@@ -25,7 +30,22 @@ class ReclamoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dataInput = $request->all();
+
+        $validator = Validator::make($dataInput, [
+            'title' => 'required',
+            'description' => 'required',
+            'animal_id' => 'required',
+            'url' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Campos incorrectos', $validator->errors(),400);
+        }
+
+        $reclamo = Reclamo::create($dataInput);
+
+        return $this->sendResponse(new ReclamoResource($reclamo), 'Reclamo creado con éxito');
     }
 
     /**
@@ -36,29 +56,52 @@ class ReclamoController extends Controller
      */
     public function show($id)
     {
-        //
+        $reclamo = Reclamo::find($id);
+
+        if(is_null($reclamo)){
+            return $this->sendError('Reclamo no encontrado');
+        }
+
+        return $this->sendResponse(new ReclamoResource($reclamo), 'Reclamo mostrado con éxito');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Reclamo  $reclamo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Reclamo $reclamo)
     {
-        //
+        $dataInput = $request->all();
+
+        $validator = Validator::make($dataInput, [
+            'title' => 'required',
+            'description' => 'required',
+            'animal_id' => 'required',
+            'url' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Campos incorrectos', $validator->errors());
+        }
+
+        $reclamo->update($dataInput);
+
+        return $this->sendResponse(new ReclamoResource($reclamo), 'Reclamo modificado con éxito');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Reclamo $reclamo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Reclamo $reclamo)
     {
-        //
+        $reclamo->delete();
+
+        return $this->sendResponse([], 'Reclamo borrado con éxito');
     }
 }

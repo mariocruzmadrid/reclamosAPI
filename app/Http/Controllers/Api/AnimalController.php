@@ -19,7 +19,7 @@ class AnimalController extends BaseController
     {
         $animals = Animal::all();
 
-        return $this->sendResponse(AnimalResource::collection($animals),'Animals retrieved successfully');
+        return $this->sendResponse(AnimalResource::collection($animals),'Animales mostrados con éxito');
     }
 
     /**
@@ -37,12 +37,12 @@ class AnimalController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error', $validator->errors(),400);
+            return $this->sendError('Error en los campos', $validator->errors(),400);
         }
 
         $animal = Animal::create($dataInput);
 
-        return $this->sendResponse(new AnimalResource($animal), 'Animal created successfully');
+        return $this->sendResponse(new AnimalResource($animal), 'Animal creado con éxito');
     }
 
     /**
@@ -56,10 +56,10 @@ class AnimalController extends BaseController
         $animal = Animal::find($id);
 
         if(is_null($animal)){
-            return $this->sendError('Animal not found');
+            return $this->sendError('Animal no encontrado');
         }
 
-        return $this->sendResponse(new AnimalResource($animal), 'Animal retrieved successfully');
+        return $this->sendResponse(new AnimalResource($animal), 'Animal mostrado con éxito');
     }
 
     /**
@@ -78,12 +78,12 @@ class AnimalController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error', $validator->errors());
+            return $this->sendError('Error en los campos', $validator->errors());
         }
 
         $animal->update($dataInput);
 
-        return $this->sendResponse(new AnimalResource($animal), 'Animal updated successfully');
+        return $this->sendResponse(new AnimalResource($animal), 'Animal modificado con éxito');
     }
 
     /**
@@ -96,6 +96,6 @@ class AnimalController extends BaseController
     {
         $animal->delete();
 
-        return $this->sendResponse([], 'Animal deleted successfully');
+        return $this->sendResponse([], 'Animal borrado con éxito');
     }
 }
