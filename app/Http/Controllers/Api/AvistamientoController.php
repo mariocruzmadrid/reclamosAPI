@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController as BaseController;
 use Illuminate\Http\Request;
-use App\RegistroAvistamiento;
+use App\Avistamiento;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\RegistroAvistamiento as RegistroAvistamientoResource;
+use App\Http\Resources\Avistamiento as AvistamientoResource;
 
-class RegistroAvistamientoController extends BaseController
+class AvistamientoController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +17,9 @@ class RegistroAvistamientoController extends BaseController
      */
     public function index()
     {
-        $regAvistamiento = RegistroAvistamiento::all();
+        $avistamiento = Avistamiento::all();
 
-        return $this->sendResponse(RegistroAvistamientoResource::collection($regAvistamiento),'Registros avistamiento mostrados con éxito');
+        return $this->sendResponse(AvistamientoResource::collection($avistamiento),'Avistamientos mostrados con éxito');
     }
 
     /**
@@ -42,9 +42,9 @@ class RegistroAvistamientoController extends BaseController
             return $this->sendError('Campos incorrectos', $validator->errors(),400);
         }
 
-        $regAvistamiento = RegistroAvistamiento::create($dataInput);
+        $avistamiento = Avistamiento::create($dataInput);
 
-        return $this->sendResponse(new RegistroAvistamientoResource($regAvistamiento), 'Registro avistamiento creado con éxito');
+        return $this->sendResponse(new AvistamientoResource($avistamiento), 'Avistamiento creado con éxito');
     }
 
     /**
@@ -55,54 +55,50 @@ class RegistroAvistamientoController extends BaseController
      */
     public function show($id)
     {
-        $regAvistamiento = RegistroAvistamiento::find($id);
+        $avistamiento = Avistamiento::find($id);
 
-        if(is_null($regAvistamiento)){
-            return $this->sendError('Registro avistamiento no encontrado');
+        if(is_null($avistamiento)){
+            return $this->sendError('Avistamiento no encontrado');
         }
 
-        return $this->sendResponse(new RegistroAvistamientoResource($regAvistamiento), 'Registro avistamiento mostrado con éxito');
+        return $this->sendResponse(new AvistamientoResource($avistamiento), 'Avistamiento mostrado con éxito');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  RegistroAvistamiento $regAvistamiento
+     * @param  Avistamiento $avistamiento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RegistroAvistamiento $regAvistamiento)
+    public function update(Request $request, Avistamiento $avistamiento)
     {
         $dataInput = $request->all();
 
         $validator = Validator::make($dataInput, [
             'date' => 'required',
             'animal_id' => 'required',
-            'user_id' => 'required',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Campos incorrectos', $validator->errors());
         }
 
-        $regAvistamiento->date = $dataInput['date'];
-        $regAvistamiento->animal_id = $dataInput['animal_id'];
-        $regAvistamiento->user_id = $dataInput['user_id'];
-        $regAvistamiento->save();
+        $avistamiento->update($dataInput);
 
-        return $this->sendResponse(new RegistroAvistamientoResource($regAvistamiento), 'Registro avistamiento modificado con éxito');
+        return $this->sendResponse(new AvistamientoResource($avistamiento), 'Avistamiento modificado con éxito');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  RegistroAvistamiento $regAvistamiento
+     * @param  Avistamiento $avistamiento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RegistroAvistamiento $regAvistamiento)
+    public function destroy(Avistamiento $avistamiento)
     {
-        $regAvistamiento->delete();
+        $avistamiento->delete();
 
-        return $this->sendResponse([], 'Registro avistamiento borrado con éxito');
+        return $this->sendResponse([], 'Avistamiento borrado con éxito');
     }
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RegistroAvistamiento extends Model
+class Avistamiento extends Model
 {
     protected $fillable = [
         'date','user_id','animal_id',

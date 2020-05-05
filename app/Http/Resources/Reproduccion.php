@@ -3,10 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Animal as AnimalResource;
-use App\Http\Resources\Animal as UserResource;
+use App\Http\Resources\Reclamo as ReclamoResource;
 
-class RegistroAvistamiento extends JsonResource
+class Reproduccion extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,8 +18,7 @@ class RegistroAvistamiento extends JsonResource
         return [
             'id' => $this->id,
             'date' => $this->date,
-            'animal' => new AnimalResource($this->animal),
-            'user' => new UserResource($this->user),
+            'reclamo' => new ReclamoResource($this->reclamo),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

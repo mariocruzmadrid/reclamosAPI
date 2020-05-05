@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegistroAvistamientosTable extends Migration
+class CreateAvistamientosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRegistroAvistamientosTable extends Migration
      */
     public function up()
     {
-        Schema::create('registro_avistamientos', function (Blueprint $table) {
+        Schema::create('avistamientos', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date',0);
             $table->unsignedBigInteger('animal_id');
@@ -32,6 +32,6 @@ class CreateRegistroAvistamientosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registro_avistamiento');
+        Schema::dropIfExists('avistamiento');
     }
 }
