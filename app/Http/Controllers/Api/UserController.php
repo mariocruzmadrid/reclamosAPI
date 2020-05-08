@@ -53,14 +53,11 @@ class UserController extends BaseController
         $validator = Validator::make($dataInput, [
             'name' => 'required',
             'email' => 'email|required',
-            'password' => 'required|confirmed',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Error en los campos', $validator->errors());
         }
-
-        $dataInput['password'] = bcrypt($dataInput['password']);
 
         $user->update($dataInput);
 
