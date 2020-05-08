@@ -18,9 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/register','Api\AuthController@register');
+Route::post('/register','Api\AuthController@register')->middleware('auth:api');
 Route::post('/login','Api\AuthController@login');
 Route::resource('/animals','Api\AnimalController')->middleware('auth:api');
 Route::resource('/reclamos','Api\ReclamoController')->middleware('auth:api');
 Route::resource('/avistamientos','Api\AvistamientoController')->middleware('auth:api');
 Route::resource('/reproduccions','Api\ReproduccionController')->middleware('auth:api');
+Route::resource('/users','Api\UserController')->middleware('auth:api');

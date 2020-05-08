@@ -36,14 +36,18 @@ class ReclamoController extends BaseController
             'title' => 'required',
             'description' => 'required',
             'animal_id' => 'required',
-            'url' => 'required',
+            'reclamo' => 'required',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Campos incorrectos', $validator->errors(),400);
         }
 
-        $reclamo = Reclamo::create($dataInput);
+        $reclamo = new Reclamo;
+        $reclamo->title = $dataInput['title'];
+        $reclamo->descripcion = $dataInput['descripcion'];
+        $reclamo->animal_id = $dataInput['animal_id'];
+        $reclamo->url = $dataInput['reclamo']->store();
 
         return $this->sendResponse(new ReclamoResource($reclamo), 'Reclamo creado con éxito');
     }
